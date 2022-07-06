@@ -41,9 +41,15 @@ def main():
         print(f'downloading model {args.model_path}')
         open(args.model_path, 'wb').write(r.content)
 
+    import time
+    t0 = time.time()
+
     model = define_model(args)
     model.eval()
     model = model.to(device)
+
+    t1 = time.time()
+    print("TIME TAKEN TO INIT MODEL: "+str(t1-t0)+" seconds")
 
     # setup folder and path
     folder, save_dir, border, window_size = setup(args)
@@ -118,10 +124,7 @@ def main():
             ave_psnr_b = sum(test_results['psnr_b']) / len(test_results['psnr_b'])
             print('-- Average PSNR_B: {:.2f} dB'.format(ave_psnr_b))
 
-import time
-
 def define_model(args):
-    t0 = time.time()
     
     # 001 classical image sr
     if args.task == 'classical_sr':
@@ -178,8 +181,6 @@ def define_model(args):
     pretrained_model = torch.load(args.model_path)
     model.load_state_dict(pretrained_model[param_key_g] if param_key_g in pretrained_model.keys() else pretrained_model, strict=True)
 
-    t1 = time.time()
-    print("TIME TAKEN TO INIT MODEL: "+str(t1-t0)+" seconds")
     return model
 
 
