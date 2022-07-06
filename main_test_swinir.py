@@ -179,7 +179,7 @@ def define_model(args):
     model.load_state_dict(pretrained_model[param_key_g] if param_key_g in pretrained_model.keys() else pretrained_model, strict=True)
 
     t1 = time.time()
-    print("TIME TAKEN TO INIT MODEL: "+(t1-t0)+" seconds")
+    print("TIME TAKEN TO INIT MODEL: "+str(t1-t0)+" seconds")
     return model
 
 
