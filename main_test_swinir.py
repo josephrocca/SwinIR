@@ -118,8 +118,11 @@ def main():
             ave_psnr_b = sum(test_results['psnr_b']) / len(test_results['psnr_b'])
             print('-- Average PSNR_B: {:.2f} dB'.format(ave_psnr_b))
 
+import time
 
 def define_model(args):
+    t0 = time.time()
+    
     # 001 classical image sr
     if args.task == 'classical_sr':
         model = net(upscale=args.scale, in_chans=3, img_size=args.training_patch_size, window_size=8,
@@ -175,6 +178,8 @@ def define_model(args):
     pretrained_model = torch.load(args.model_path)
     model.load_state_dict(pretrained_model[param_key_g] if param_key_g in pretrained_model.keys() else pretrained_model, strict=True)
 
+    t1 = time.time()
+    print("TIME TAKEN TO INIT MODEL: "+(t1-t0)+" seconds")
     return model
 
 
